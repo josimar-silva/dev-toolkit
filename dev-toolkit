@@ -1,0 +1,60 @@
+#!/bin/bash
+
+TOOLKIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/tools"
+TOOLKIT_VERSION_FILE="${TOOLKIT_DIR%/tools}/VERSION"
+TOOLKIT_VERSION=$(cat "$TOOLKIT_VERSION_FILE" 2>/dev/null || echo "v0.0.0")
+
+# Autocomplete function
+_dev_toolkit_autocomplete() {
+  local cur prev tools commands
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+  # Complete tools
+  if [[ $COMP_CWORD -eq 1 ]]; then
+    tools=$(ls "$TOOLKIT_DIR")
+    COMPREPLY=( $(compgen -W "$tools" -- "$cur") )
+    return 0
+  fi
+
+  # Complete commands for a given tool
+  if [[ $COMP_CWORD -eq 2 ]]; then
+    local tool_dir="$TOOLKIT_DIR/${COMP_WORDS[1]}"
+    if [[ -d "$tool_dir" ]]; then
+      commands=$(find "$tool_dir" -type f -name "*.sh" -exec basename {} .sh \;)
+      COMPREPLY=( $(compgen -W "$commands" -- "$cur") )
+    fi
+    return 0
+  fi
+}
+
+# Register the autocomplete function
+complete -F _dev_toolkit_autocomplete dev-toolkit
+complete -F _dev_toolkit_autocomplete dt
+
+# Handle version flag
+if [[ "$1" == "--version" || "$1" == "-v" ]]; then
+  echo "dev-toolkit $TOOLKIT_VERSION"
+  exit 0
+fi
+
+# Main logic
+TOOL=$1
+COMMAND=$2
+
+if [[ -z "$TOOL" || -z "$COMMAND" ]]; then
+  echo "Usage: dev-toolkit <tool> <command>"
+  echo "Available tools:"
+  ls "$TOOLKIT_DIR"
+  exit 1
+fi
+
+SCRIPT_PATH="$TOOLKIT_DIR/$TOOL/$COMMAND.sh"
+
+if [[ -f "$SCRIPT_PATH" ]]; then
+  bash "$SCRIPT_PATH" "${@:3}"
+else
+  echo "❌ Command not found: $TOOL $COMMAND"
+  exit 1
+fi
