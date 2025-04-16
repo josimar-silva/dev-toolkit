@@ -17,7 +17,7 @@ jobs:
       release: ${{ steps.get_version.outputs.release }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Get toolkit Version
         id: get_version
         run: |
@@ -34,6 +34,10 @@ jobs:
     if: needs.fetch-version.outputs.release == 'false'
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Package project
         run: |
           mkdir -p dist
@@ -42,7 +46,7 @@ jobs:
           SNAPSHOT_VERSION: ${{ needs.fetch-version.outputs.version }}
       - name: Archive artifact
         if: success()
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v4
         with:
           name: snapshot
           path: dist/*.tar.gz
@@ -52,6 +56,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Create tag
         run: |
           git config user.name "github-actions"
