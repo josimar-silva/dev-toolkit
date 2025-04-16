@@ -42,7 +42,7 @@ jobs:
           SNAPSHOT_VERSION: ${{ needs.fetch-version.outputs.version }}
       - name: Archive artifact
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.0
         with:
           name: snapshot
           path: dist/*.tar.gz
