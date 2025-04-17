@@ -91,7 +91,7 @@ jobs:
           awk "/^## $TAG/{flag=1; next} /^## /{flag=0} flag" CHANGES.md > dist/release_notes.md
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ needs.fetch-version.outputs.version }}
           body_path: dist/release_notes.md
