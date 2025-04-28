@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.1.1
+- change base branch from `master` to `main` on git config template (command: `git init-config`)
+
 ## v0.1.0
 - Initial release of dev toolkit.
 - add `git profile` script

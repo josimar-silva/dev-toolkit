@@ -47,7 +47,7 @@ cat >> "$GITCONFIG_PATH" <<EOF
 	rhh = !git reset --hard HEAD
 	st = !git status
 	mr = !sh -c 'git fetch \$1 merge-requests/\$2/head:mr-\$1-\$2 && git checkout mr-\$1-\$2' -
-	rbm = !git checkout master && git pull && git checkout - && git rebase -i master
+	rbm = !git checkout main && git pull && git checkout - && git rebase -i main
 	undo = reset --soft HEAD^
 	stash-please = !git add . && git stash save * && git status
 	unstash = !git stash pop && git reset && git status
