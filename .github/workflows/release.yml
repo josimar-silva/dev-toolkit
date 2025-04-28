@@ -88,7 +88,7 @@ jobs:
         id: changelog
         run: |
           TAG=v${{ needs.fetch-version.outputs.version }}
-          awk "/^## $TAG/{flag=1; next} /^## /{flag=0} flag" CHANGES.md > dist/release_notes.md
+          awk "/^## $TAG/{flag=1; next} /^## /{flag=0} flag" CHANGELOG.md > dist/release_notes.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
