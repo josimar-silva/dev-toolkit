@@ -1,6 +1,7 @@
 # Changelog
 
-## v0.1.1
+## v0.2.0
+- add `ubuntu fix-apt-package-list` script
 - change base branch from `master` to `main` on git config template (command: `git init-config`)
 
 ## v0.1.0
